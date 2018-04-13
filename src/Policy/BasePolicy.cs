@@ -36,7 +36,7 @@ namespace SNS_Bonus
                 while (cur < last)
                 {
                     //出队一个元素    
-                    current = queue.Peek();
+                    current = queue.Dequeue();
 
                     //需要传入一个函数，函数里面需要处理怎么计算释放的红利
                     totalReleaseBonus += releaseBonus(tier, current);
