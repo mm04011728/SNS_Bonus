@@ -25,7 +25,7 @@ namespace SNS_Bonus
 
         #endregion
 
-        public Member(List<MemberLevel> levels, BonusState bonusState, WalletState walletState,IWalletPolicy walletPolicy,IBonusPolicy bonusPolicy,IMemberPolicy memberPolicy)
+        public Member(List<MemberLevel> levels, BonusState bonusState, WalletState walletState, IWalletPolicy walletPolicy, IBonusPolicy bonusPolicy, IMemberPolicy memberPolicy)
         {
             this._bonusState = bonusState;
             this._levels = levels;
@@ -36,18 +36,19 @@ namespace SNS_Bonus
             this.Children = new List<Member>();
         }
 
-        public override string ToString(){
+        public override string ToString()
+        {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(string.Format("会员姓名：{0}",this.Name));
-            sb.AppendLine(string.Format("会员等级：{0}",this.Level().Level));
-            sb.AppendLine(string.Format("真实现金额：{0}",this.RealMoney));
-            sb.AppendLine(string.Format("总红利：{0}",this.TotalBonus));
-            sb.AppendLine(string.Format("剩余红利：{0}",this.RestBonus));
-            sb.AppendLine(string.Format("现金钱包：{0}",this.CashWallet));
-            sb.AppendLine(string.Format("商城钱包：{0}",this.MallWallet));
-            sb.AppendLine(string.Format("抢币钱包：{0}",this.SNSWallet));
-            sb.AppendLine(string.Format("静态获得红利：{0}",this.StaticGotBonus));
-            sb.AppendLine(string.Format("动态获得红利：{0}",this.DynamicGotBonus));
+            sb.AppendLine(string.Format("会员姓名：{0}", this.Name));
+            sb.AppendLine(string.Format("会员等级：{0}", this.Level().Level));
+            sb.AppendLine(string.Format("真实现金额：{0}", this.RealMoney));
+            sb.AppendLine(string.Format("总红利：{0}", this.TotalBonus));
+            sb.AppendLine(string.Format("剩余红利：{0}", this.RestBonus));
+            sb.AppendLine(string.Format("现金钱包：{0}", this.CashWallet));
+            sb.AppendLine(string.Format("商城钱包：{0}", this.MallWallet));
+            sb.AppendLine(string.Format("抢币钱包：{0}", this.SNSWallet));
+            sb.AppendLine(string.Format("静态获得红利：{0}", this.StaticGotBonus));
+            sb.AppendLine(string.Format("动态获得红利：{0}", this.DynamicGotBonus));
             return sb.ToString();
         }
 
@@ -114,7 +115,7 @@ namespace SNS_Bonus
 
         //对碰奖金额
         public double BinaryBonus()
-            => this._bonusPolicy.BinaryReward(this,this.Level().BinaryRewardRatio,this.Level().TopOfBinaryReward);
+            => this._bonusPolicy.BinaryReward(this, this.Level().BinaryRewardRatio, this.Level().TopOfBinaryReward);
 
         //见点奖
         public void WatchPointsReward()
@@ -156,19 +157,14 @@ namespace SNS_Bonus
         //钱包增加
         private void increaseWallet(double total, double cashRatio, double SNSRatio)
         {
-            this.CashWallet += this._walletPolicy.CalcStaticBonusCashWallet(
+            this.CashWallet += this._walletPolicy.CalcBonusCashWallet(
                 total,
                 cashRatio,
                 this._walletState.ManagementCostRatio,
                 this._walletState.MallRatio
             );
             this.MallWallet += this._walletPolicy.CalcMallWallet(total, this._walletState.MallRatio);
-            this.SNSWallet += this._walletPolicy.CalcStaticBonusSNSWallet(
-                total,
-                SNSRatio,
-                this._walletState.ManagementCostRatio,
-                this._walletState.MallRatio
-            );
+            this.SNSWallet += this._walletPolicy.CalcBonusSNSWallet(total, SNSRatio);
         }
 
         #endregion

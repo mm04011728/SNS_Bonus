@@ -28,14 +28,14 @@ namespace SNS_Bonus
         public double CalcMallWallet(double totalCosts, double ratio)
             => this._basePolicy.TimesFunc(totalCosts, ratio);
 
-        //计算静态释放现金钱包增加
-        public double CalcStaticBonusCashWallet(double releasedStaticBonus, double staticBonusCashRatio, double managementCostRatio, double mallRatio)
+        //计算现金钱包增加
+        public double CalcBonusCashWallet(double releasedStaticBonus, double staticBonusCashRatio, double managementCostRatio, double mallRatio)
         {
             return this._basePolicy.TimesFunc(this._basePolicy.TimesFunc(releasedStaticBonus, staticBonusCashRatio), 1 - managementCostRatio - mallRatio);
         }
 
-        //计算静态释放社交/抢币钱包增加
-        public double CalcStaticBonusSNSWallet(double releasedStaticBonus, double staticBonusSNSRatio, double managementCostRatio, double mallRatio)
-            => CalcStaticBonusCashWallet(releasedStaticBonus, staticBonusSNSRatio, managementCostRatio, mallRatio);
+        //计算社交/抢币钱包增加
+        public double CalcBonusSNSWallet(double releasedStaticBonus, double staticBonusSNSRatio)
+            => this._basePolicy.TimesFunc(releasedStaticBonus, staticBonusSNSRatio);
     }
 }
