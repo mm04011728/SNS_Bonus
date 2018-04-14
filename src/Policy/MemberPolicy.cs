@@ -110,5 +110,39 @@ namespace SNS_Bonus
             }
             return selected;
         }
+
+        //为一个会员列表添加树状关系，根据会员的上级和上一代ID值建立关系
+        public void GenarateMembersRelationship(List<Member> members)
+        {
+            Dictionary<Guid, Member> dictMembers = new Dictionary<Guid, Member>();
+            foreach (var member in members)
+            {
+                dictMembers.Add(member.ID, member);
+            }
+            foreach (var member in members)
+            {
+                Guid parentID = member.ParentID;
+                Guid topID = member.TopMemberID;
+                if (dictMembers.ContainsKey(topID))
+                {
+                    Member topMember = dictMembers[topID];
+                    member.TopMember = topMember;
+                    if (topMember.LeftMember == null)
+                    {
+                        topMember.LeftMember = member;
+                    }
+                    else
+                    {
+                        topMember.RightMember = member;
+                    }
+                }
+                if (dictMembers.ContainsKey(parentID))
+                {
+                    Member parentMember = dictMembers[parentID];
+                    member.Parent = parentMember;
+                    parentMember.Children.Add(member);
+                }
+            }
+        }
     }
 }
