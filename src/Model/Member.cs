@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
 
 namespace SNS_Bonus
 {
@@ -32,6 +33,22 @@ namespace SNS_Bonus
             this._walletPolicy = walletPolicy;
             this._bonusPolicy = bonusPolicy;
             this._memberPolicy = memberPolicy;
+            this.Children = new List<Member>();
+        }
+
+        public override string ToString(){
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(string.Format("会员姓名：{0}",this.Name));
+            sb.AppendLine(string.Format("会员等级：{0}",this.Level().Level));
+            sb.AppendLine(string.Format("真实现金额：{0}",this.RealMoney));
+            sb.AppendLine(string.Format("总红利：{0}",this.TotalBonus));
+            sb.AppendLine(string.Format("剩余红利：{0}",this.RestBonus));
+            sb.AppendLine(string.Format("现金钱包：{0}",this.CashWallet));
+            sb.AppendLine(string.Format("商城钱包：{0}",this.MallWallet));
+            sb.AppendLine(string.Format("抢币钱包：{0}",this.SNSWallet));
+            sb.AppendLine(string.Format("静态获得红利：{0}",this.StaticGotBonus));
+            sb.AppendLine(string.Format("动态获得红利：{0}",this.DynamicGotBonus));
+            return sb.ToString();
         }
 
         #region 基本信息
@@ -202,6 +219,7 @@ namespace SNS_Bonus
 
         //上层领导
         public Member TopMember { get; set; }
+        public Guid TopMemberID { get; set; }
 
         //左膀
         public Member LeftMember { get; set; }
@@ -211,6 +229,7 @@ namespace SNS_Bonus
 
         //上代单亲
         public Member Parent { get; set; }
+        public Guid ParentID { get; set; }
 
         //下代子孙
         public List<Member> Children { get; set; }

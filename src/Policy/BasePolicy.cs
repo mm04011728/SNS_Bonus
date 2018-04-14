@@ -58,5 +58,33 @@ namespace SNS_Bonus
             }
             return totalReleaseBonus;
         }
+
+        public void TreeTierAction(Member member, Action<Member> eachMemberAction, Action<Member, Queue<Member>> enqueue)
+        {
+            if (member == null)
+                return;
+            Member current = null;
+            Queue<Member> queue = new Queue<Member>();
+            queue.Enqueue(member);
+            int cur, last;
+            while (queue.Count != 0)
+            {
+                //记录本层已经遍历的节点个数
+                cur = 0;
+                //当遍历完当前层以后，队列里元素全是下一层的元素，队列的长度是这一层的节点的个数
+                last = queue.Count;
+                //当还没有遍历到本层最后一个节点时循环
+                while (cur < last)
+                {
+                    //出队一个元素    
+                    current = queue.Dequeue();
+                    //需要传入方法，怎么处理每个元素
+                    eachMemberAction(current);
+                    cur++;
+                    //需要传入一个函数，函数里面要处理怎么将子节点入队
+                    enqueue(current, queue);
+                }
+            }
+        }
     }
 }

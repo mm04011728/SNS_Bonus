@@ -20,7 +20,7 @@ namespace SNS_Bonus
             WatchPointsRewardRatio = 0.01,
             TiersOfOfWatchPointsReward = 10,
             StartTierOfWatchPointsReward = 6,
-            IsRecommendingOn = true,
+            IsRecommendingOn = false,
             StartOfLeaderReward = 1
         };
 
@@ -57,11 +57,11 @@ namespace SNS_Bonus
             => this._basePolicy.TreeTierFunc(
                 member,
                 //匿名函数releaseBonus(int tier, Member current)
-                (tier, current) => eachBonus(
-                    tier,
-                    startOfLeaderReward,
-                    leaderRewardEachRatio[tier - 1],
-                    current.BinaryBonus),
+                (tier, current) =>
+                {
+                    double ratio = tier >= startOfLeaderReward ? leaderRewardEachRatio[tier - 1] : 0;
+                    return eachBonus(tier, startOfLeaderReward, ratio, current.BinaryBonus);
+                },
                 //子孙后代入队
                 childrenEnqueue,
                 //匿名函数isEnd(int tier)

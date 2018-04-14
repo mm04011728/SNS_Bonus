@@ -27,7 +27,7 @@ namespace SNS_Bonus
         {
             get
             {
-                return 1 - this.DynamicBonusSNSRatio;
+                return 1 - this.DynamicBonusCashRatio;
             }
         }
 
