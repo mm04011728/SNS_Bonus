@@ -36,6 +36,27 @@ namespace SNS_Bonus
         public double RecommendReward(double recommendRewardRatio, double money)
             => this._basePolicy.TimesFunc(recommendRewardRatio, money);
 
+        //拍点极差奖
+        public void RangeReward(Member member, double money)
+            => this._basePolicy.TreeTierAction(
+                member,
+                (tier, current, max) =>
+                {
+                    if (tier > 0)
+                    {
+                        if (current.RangeRatio > max)
+                        {
+                            double difference = current.RangeRatio - max;
+                            current.CurrentRangeAction(this._basePolicy.TimesFunc(money, difference));
+                            max = current.RangeRatio;
+                        }
+                    }
+                    return max;
+                },
+                parentEnqueue
+            );
+
+
         //见点奖
         public double WatchPointsReward(Member member, int startTier, int tiers, double watchPointsRewardRatio)
             => this._basePolicy.TreeTierFunc(
@@ -129,6 +150,15 @@ namespace SNS_Bonus
             foreach (var item in current.Children)
             {
                 queue.Enqueue(item);
+            }
+        }
+
+        //上代单亲入队
+        private void parentEnqueue(Member current, Queue<Member> queue)
+        {
+            if (current.Parent != null)
+            {
+                queue.Enqueue(current.Parent);
             }
         }
     }

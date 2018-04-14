@@ -9,5 +9,7 @@ namespace SNS_Bonus{
         double MinFunc(double a, double b);
 
         double TreeTierFunc(Member member, Func<int, Member, double> releaseBonus, Action<Member, Queue<Member>> enqueue, Func<int, bool> isEnd);
+
+        void TreeTierAction(Member member, Func<int, Member, double, double> eachMemberAction, Action<Member, Queue<Member>> enqueue);
     }
 }

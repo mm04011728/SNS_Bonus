@@ -18,8 +18,8 @@ namespace SNS_Bonus
 
             printStates(defaultBonus, defaultWallet, defaultMemberLevels);
 
-            List<string> memberTierNums = memberNumGenerator("00", 2, 2, 2, false, 1000);
-            List<string> memberGenerationNums = memberNumGenerator("00", 2, 2, 5, true, 1000);
+            List<string> memberTierNums = memberNumGenerator("00", 2, 2, 2, false, 30);
+            List<string> memberGenerationNums = memberNumGenerator("00", 2, 2, 3, true, 30);
             List<Member> members = memberInitGenarator(
                 memberTierNums,
                 memberGenerationNums,
@@ -32,7 +32,7 @@ namespace SNS_Bonus
                 memberPolicy
             );
 
-            //充值和推荐奖测试
+            //充值和推荐奖和拍点极差奖测试
             testOfRecharge(1000, 100000, members);
 
             //见点奖测试
@@ -51,14 +51,19 @@ namespace SNS_Bonus
             printResult(members);
         }
 
-        //充值和推荐奖测试
+        //充值和推荐奖和拍点极差奖测试
         private static void testOfRecharge(int min, int max, List<Member> members)
         {
             Random random = new Random();
             foreach (var item in members)
             {
                 int money = random.Next(min, max);
+                //充值
                 item.Recharge(money);
+                //推荐奖
+                item.RecommendReward(money);
+                //拍点极差奖
+                item.RangeReward(money);
 
                 if (item.Parent != null)
                 {
@@ -151,7 +156,8 @@ namespace SNS_Bonus
                 Member member = new Member(levels, bonusState, walletState, walletPolicy, bonusPolicy, memberPolicy)
                 {
                     Name = string.Format("{0}-{1}", tierNum, generationNum),
-                    ID = Guid.NewGuid()
+                    ID = Guid.NewGuid(),
+                    RangeRatio = random.NextDouble()
                 };
                 members.Add(member);
                 tierMembers.Add(tierNum, member);

@@ -83,7 +83,6 @@ namespace SNS_Bonus
             this.RealMoney += money;
             double bonus = this._bonusPolicy.CalcBonus(this._bonusState.Index, money);
             this.increaseBonus(bonus);
-            this.RecommendReward(money);
         }
 
         //红利增加
@@ -91,6 +90,16 @@ namespace SNS_Bonus
         {
             this.RestBonus += bonus;
             this.TotalBonus += bonus;
+        }
+        //拍点极差奖
+        public void RangeReward(double money)
+         => this._bonusPolicy.RangeReward(this, money);
+
+        //当前极差处理
+        public void CurrentRangeAction(double totalReward)
+        {
+            this.DynamicGotBonus += totalReward;
+            this.increaseWallet(totalReward, this._walletState.DynamicBonusCashRatio, this._walletState.DynamicBonusSNSRatio);
         }
 
         //领导奖
@@ -209,6 +218,9 @@ namespace SNS_Bonus
 
 
         #region 会员关系属性
+
+        //拍点极差比例
+        public double RangeRatio { get; set; }
 
         //会员等级
         public MemberLevel Level() => this._memberPolicy.CalcLevel(this.RealMoney, this._levels);

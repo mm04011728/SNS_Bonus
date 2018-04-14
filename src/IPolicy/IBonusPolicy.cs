@@ -24,6 +24,9 @@ namespace SNS_Bonus
 
         ///对碰奖
         double BinaryReward(Member member, double binaryRewardRatio, double topOfBinaryReward);
+
+        //拍点极差奖
+        void RangeReward(Member member, double money);
     }
 
 
